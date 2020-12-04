@@ -26,12 +26,19 @@ module Onebox
 
       def to_html
         item = fetcher[:data][0]
+        etiketa = extractEtiketa(item[:etiketa])
         <<-HTML
           <aside class="onebox rebetikosealabs">
             <header class="source">
               <a href="#{item[:"0"]}" target="_blank">rebetiko.sealabs.net - Βάση Δεδομένων</a>
             </header>
             <article class="onebox-body">
+              #{ etiketa ? 
+                <<-HTML
+                <img src="#{etiketa}" class="thumbnail"/> 
+                HTML
+                : nil
+              }
               <a href="#{item[:"0"]}" target="_blank"><h3>#{item[:name]}</h3></a>
               <p>#{item[:info]}</p>
             </article>
@@ -123,6 +130,17 @@ module Onebox
         })
         body = ::MultiJson.load(res.body, symbolize_keys: true)
         @fetcher = body
+      end
+
+      def extractEtiketa(etiketa)
+        match = etiketa.match(/src='(.*)'/)
+        if (match && match.length > 1)
+          if (match[1] != "/app.php/gallery/image//source")
+            return "https://rebetiko.sealabs.net/" + match[1]
+          end
+        end
+
+        nil
       end
 
       def extractMousiki(mousiki)
