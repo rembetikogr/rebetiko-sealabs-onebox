@@ -1,2 +1,11 @@
-.sealabs-onebox {
+.onebox.rebetikosealabs .label1, .label2, .subtitle {
+    color: var(--primary-med-or-secondary-med);
+}
+
+.onebox.rebetikosealabs .label1 {
+    float: left;
+}
+
+.onebox.rebetikosealabs .label2 {
+    float: right;
 }

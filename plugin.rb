@@ -6,7 +6,7 @@
 # authors: chrispanag
 # url: https://github.com/chrispanag
 
-# register_asset 'stylesheets/common/sealabs-onebox.scss'
+register_asset 'stylesheets/common/sealabs-onebox.scss'
 # register_asset 'stylesheets/desktop/sealabs-onebox.scss', :desktop
 # register_asset 'stylesheets/mobile/sealabs-onebox.scss', :mobile
 
@@ -27,10 +27,11 @@ module Onebox
       def to_html
         item = fetcher[:data][0]
         etiketa = extractEtiketa(item[:etiketa])
+        etos = extractEtos(item[:etosixog])
         <<-HTML
           <aside class="onebox rebetikosealabs">
             <header class="source">
-              <a href="#{item[:"0"]}" target="_blank">rebetiko.sealabs.net - Βάση Δεδομένων</a>
+              <a href="#{item[:"0"]}" target="_blank">rebetiko.sealabs.net – Βάση Δεδομένων</a>
             </header>
             <article class="onebox-body">
               #{ etiketa ? 
@@ -39,14 +40,15 @@ module Onebox
                 HTML
                 : nil
               }
-              <a href="#{item[:"0"]}" target="_blank"><h3>#{item[:name]}</h3></a>
+              <a href="#{item[:"0"]}" target="_blank"><h3>#{item[:name]}#{etos ? " – " + etos : nil}</h3></a>
+              <div class=subtitle>#{extractMousiki(item[:mousiki])}</div>
               <p>#{item[:info]}</p>
+              <p>
+                <span class="label1">💿 #{item[:ar_mitras] != "" ? " Αρ. Μήτρας: " + item[:ar_mitras] + " " : nil}#{item[:ardiskou] != "" ? "Αρ. Δίσκου: " + item[:ardiskou] : nil}</span>
+                <span class="label2">#{item[:duration] != "" ? "Διάρκεια: " + item[:duration] + " ⏱": nil}</span>
+              </p>
             </article>
             <div class="onebox-metadata">
-              <p><b>Μουσική:</b> #{extractMousiki(item[:mousiki])}</p>
-              <p>
-                #{item[:etosixog] != "" ? "<b>Έτος Ηχ.:</b> " + extractEtos(item[:etosixog]) + ", " : nil}#{item[:ar_mitras] != "" ? "<b>Αρ. Μήτρας:</b> " + item[:ar_mitras] + ", " : nil}#{item[:ardiskou] != "" ? "<b>Αρ. Δίσκου:</b> " + item[:ardiskou] + ", " : nil}#{item[:duration] != "" ? "<b>Διάρκεια:</b> " + item[:duration] : nil}
-              </p>
             </div>
             <div style="clear: both"></div>
           </aside>
@@ -151,7 +153,11 @@ module Onebox
 
       def extractEtos(etos)
         splitted = etos[0..-5].split(">")
-        splitted[splitted.length - 1]
+        etos = splitted[splitted.length - 1]
+        if (etos != "0")
+          return etos
+        end
+        nil
       end
       # def placeholder_html
       #   "<div class=\"onebox\"><a href=\"" + @url + "\" ><div style='padding:10px;'><h1>Μαρίκα Παπαγκίκα</h1><h2>Test test </h2><p>" + fetcher + "</p></a></div>"
