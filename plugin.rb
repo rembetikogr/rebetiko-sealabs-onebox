@@ -29,24 +29,27 @@ module Onebox
       # end
 
       def to_html
-        item = fetcher[:data][0]
-        <<-HTML
-        <aside class="onebox rebetikosealabs">
-          <header class="source">
-            <a href="#{item[:"0"]}" target="_blank">rebetiko.sealabs.net</a>
-          </header>
-          <article class="onebox-body">
-            <a href="#{item[:"0"]}" target="_blank"><h3>#{item[:name]}</h3></a>
-            <p>#{item[:info]}</p>
-          </article>
-          <div class="onebox-metadata">
-            <p>
-              #{item[:ar_mitras] != "" ? "<b>Αρ. Μήτρας:</b> " + item[:ar_mitras] + ", " : nil}#{item[:ardiskou] != "" ? "<b>Αρ. Δίσκου:</b> " + item[:ardiskou] + ", " : nil}#{item[:duration] != "" ? "<b>Διάρκεια:</b> " + item[:duration] : nil}
-            </p>
-          </div>
-          <div style="clear: both"></div>
-        </aside>
-        HTML
+          item = fetcher[:data][0]
+          <<-HTML
+          <aside class="onebox rebetikosealabs">
+            <header class="source">
+              <a href="#{item[:"0"]}" target="_blank">rebetiko.sealabs.net - Βάση Δεδομένων</a>
+            </header>
+            <article class="onebox-body">
+              <a href="#{item[:"0"]}" target="_blank"><h3>#{item[:name]}</h3></a>
+              <p>#{item[:info]}</p>
+            </article>
+            <div class="onebox-metadata">
+              <p><b>Μουσική:</b> #{extractMousiki(item[:mousiki])}</p>
+              <p>
+                #{item[:ar_mitras] != "" ? "<b>Αρ. Μήτρας:</b> " + item[:ar_mitras] + ", " : nil}#{item[:ardiskou] != "" ? "<b>Αρ. Δίσκου:</b> " + item[:ardiskou] + ", " : nil}#{item[:duration] != "" ? "<b>Διάρκεια:</b> " + item[:duration] : nil}
+              </p>
+            </div>
+            <div style="clear: both"></div>
+          </aside>
+          HTML
+      rescue
+        @url
       end
 
       def fetcher
@@ -114,7 +117,6 @@ module Onebox
           'length' => '10',
           'search[value]' => '',
           'search[regex]' => 'false',
-          'id_xristi' => '16780',
           'compos_query' => '',
           'searchstring' => '',
           'recid' => id,
@@ -127,6 +129,11 @@ module Onebox
           @fetcher = body
       end
 
+      def extractMousiki(mousiki)
+        splitted = mousiki[0..-5].split(">")
+        splitted[splitted.length() - 1]
+      end
+
       # def placeholder_html
       #   "<div class=\"onebox\"><a href=\"" + @url + "\" ><div style='padding:10px;'><h1>Μαρίκα Παπαγκίκα</h1><h2>Test test </h2><p>" + fetcher + "</p></a></div>"
       # end
@@ -134,7 +141,6 @@ module Onebox
     end
   end
 end
-
 # after_initialize do
 #   # https://github.com/discourse/discourse/blob/master/lib/plugin/instance.rb
 # end
