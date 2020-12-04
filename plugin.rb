@@ -42,14 +42,14 @@ module Onebox
             <div class="onebox-metadata">
               <p><b>Μουσική:</b> #{extractMousiki(item[:mousiki])}</p>
               <p>
-                #{item[:ar_mitras] != "" ? "<b>Αρ. Μήτρας:</b> " + item[:ar_mitras] + ", " : nil}#{item[:ardiskou] != "" ? "<b>Αρ. Δίσκου:</b> " + item[:ardiskou] + ", " : nil}#{item[:duration] != "" ? "<b>Διάρκεια:</b> " + item[:duration] : nil}
+                #{item[:etosixog] != "" ? "<b>Έτος Ηχ.:</b> " + extractEtos(item[:etosixog]) + ", " : nil}#{item[:ar_mitras] != "" ? "<b>Αρ. Μήτρας:</b> " + item[:ar_mitras] + ", " : nil}#{item[:ardiskou] != "" ? "<b>Αρ. Δίσκου:</b> " + item[:ardiskou] + ", " : nil}#{item[:duration] != "" ? "<b>Διάρκεια:</b> " + item[:duration] : nil}
               </p>
             </div>
             <div style="clear: both"></div>
           </aside>
           HTML
-      rescue
-        @url
+      # rescue
+      #   @url
       end
 
       def fetcher
@@ -130,10 +130,15 @@ module Onebox
       end
 
       def extractMousiki(mousiki)
-        splitted = mousiki[0..-5].split(">")
+        splitted = mousiki.split("<br>")
+        splitted = splitted[0][0..-5].split(">")
         splitted[splitted.length() - 1]
       end
 
+      def extractEtos(etos)
+        splitted = etos[0..-5].split(">")
+        splitted[splitted.length() - 1]
+      end
       # def placeholder_html
       #   "<div class=\"onebox\"><a href=\"" + @url + "\" ><div style='padding:10px;'><h1>Μαρίκα Παπαγκίκα</h1><h2>Test test </h2><p>" + fetcher + "</p></a></div>"
       # end
