@@ -6,7 +6,7 @@
 # authors: chrispanag
 # url: https://github.com/chrispanag
 
-register_asset 'stylesheets/common/sealabs-onebox.scss'
+register_asset "stylesheets/common/sealabs-onebox.scss"
 # register_asset 'stylesheets/desktop/sealabs-onebox.scss', :desktop
 # register_asset 'stylesheets/mobile/sealabs-onebox.scss', :mobile
 
@@ -40,12 +40,12 @@ module Onebox
                 HTML
                 : nil
               }
-              <a href="#{item[:"0"]}" target="_blank"><h3>#{item[:name]}#{etos ? " – " + etos : nil}</h3></a>
+              <h3><a href="#{item[:"0"]}" target="_blank">#{item[:name]}#{etos ? " – " + etos : nil}</a></h3>
               <div class=subtitle>#{extractMousiki(item[:mousiki])}</div>
               <p>#{item[:info]}</p>
               <p>
-                <span class="label1">💿 #{item[:ar_mitras] != "" ? " Αρ. Μήτρας: " + item[:ar_mitras] + " " : nil}#{item[:ardiskou] != "" ? "Αρ. Δίσκου: " + item[:ardiskou] : nil}</span>
-                <span class="label2">#{item[:duration] != "" ? "Διάρκεια: " + item[:duration] + " ⏱": nil}</span>
+                <span class="label1">#{extractDiskDetails(item[:ar_mitras], item[:ardiskou])}</span>
+                <span class="label2">#{item[:duration] != "" ? item[:duration] + " ⏱" : nil}</span>
               </p>
             </article>
             <div class="onebox-metadata">
@@ -134,10 +134,19 @@ module Onebox
         @fetcher = body
       end
 
+      def extractDiskDetails(mitra, diskos)
+        if mitra || diskos
+          return "💿 #{if mitra != ""
+                        "Μήτρα: " + mitra + (diskos ? " " : "")
+                      end}#{diskos != "" ? "Δίσκος: " + diskos : nil}"
+        end
+        nil
+      end
+
       def extractEtiketa(etiketa)
         match = etiketa.match(/src='(.*)'/)
-        if (match && match.length > 1)
-          if (match[1] != "/app.php/gallery/image//source")
+        if match && match.length > 1
+          if match[1] != "/app.php/gallery/image//source"
             return "https://rebetiko.sealabs.net/" + match[1]
           end
         end
@@ -154,7 +163,7 @@ module Onebox
       def extractEtos(etos)
         splitted = etos[0..-5].split(">")
         etos = splitted[splitted.length - 1]
-        if (etos != "0")
+        if etos != "0"
           return etos
         end
         nil
