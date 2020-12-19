@@ -5,7 +5,7 @@ SealabsOnebox is a plugin for ...
 ## Installation
 
 Follow [Install a Plugin](https://meta.discourse.org/t/install-a-plugin/19157)
-how-to from the official Discourse Meta, using `git clone https://github.com/chrispanag/sealabs-onebox.git`
+how-to from the official Discourse Meta, using `git clone https://github.com/rembetikogr/sealabs-onebox.git`
 as the plugin command.
 
 ## Usage
