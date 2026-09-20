@@ -7,8 +7,6 @@
 # url: https://github.com/chrispanag
 
 register_asset "stylesheets/common/sealabs-onebox.scss"
-# register_asset 'stylesheets/desktop/sealabs-onebox.scss', :desktop
-# register_asset 'stylesheets/mobile/sealabs-onebox.scss', :mobile
 
 PLUGIN_NAME ||= "SealabsOnebox"
 
